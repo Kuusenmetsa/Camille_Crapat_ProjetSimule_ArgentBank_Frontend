@@ -293,3 +293,13 @@ body {
 		width: 200px;
 	}
 }
+
+.error h2 {
+	color: #00bc77;
+	font-size: 128px;
+	line-height: 0;
+}
+
+.error p {
+	font-size: 36px;
+}
