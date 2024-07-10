@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import './index.css';
 
 import ChatIcon from '../../assets/icons/icon-chat.png';
@@ -6,6 +8,9 @@ import SecurityIcon from '../../assets/icons/icon-security.png';
 import BankTree from '../../assets/img/bank-tree.jpeg';
 
 export default function Home() {
+	useEffect(() => {
+		document.title = 'Argent Bank - Accueil';
+	}, []);
 	return (
 		<main>
 			<div className='hero' style={{ backgroundImage: `url(${BankTree})` }}>

@@ -1,6 +1,11 @@
+import { useEffect } from 'react';
+
 import './index.css';
 
 export default function User() {
+	useEffect(() => {
+		document.title = 'Argent Bank - Mon compte';
+	}, []);
 	return (
 		<main className='main bg-dark'>
 			<div className='header'>

@@ -1,9 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { useEffect } from 'react';
 
 import './index.css';
 
 export default function Signin() {
+	useEffect(() => {
+		document.title = 'Argent Bank - Connexion';
+	}, []);
 	return (
 		<main className='main bg-dark'>
 			<section className='sign-in-content'>
