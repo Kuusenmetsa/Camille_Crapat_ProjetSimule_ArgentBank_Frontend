@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import './index.css';
 
@@ -17,9 +18,18 @@ export default function Signin() {
 	const [error, setError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
+	const navigate = useNavigate();
+
+	// Changement du titre de la page
 	useEffect(() => {
 		document.title = 'Argent Bank - Connexion';
 	}, []);
+
+	useEffect(() => {
+		if (localStorage.getItem('token')) {
+			navigate('/user');
+		}
+	}, [navigate]);
 
 	const connection = async (e) => {
 		e.preventDefault();
@@ -51,7 +61,8 @@ export default function Signin() {
 				if (data.body && data.body.token) {
 					setError(false);
 					setErrorMessage('');
-					console.log(data.body);
+					localStorage.setItem('token', data.body.token);
+					navigate('/user');
 				} else if (data.status === 400) {
 					setError(true);
 					setErrorMessage('Votre e-mail ou votre mot de passe est incorrect !');
