@@ -303,3 +303,9 @@ body {
 .error p {
 	font-size: 36px;
 }
+
+form .error {
+	color: red;
+	font-size: 14px;
+	text-align: left;
+}
