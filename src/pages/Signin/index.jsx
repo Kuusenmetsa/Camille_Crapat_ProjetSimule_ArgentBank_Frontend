@@ -2,10 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import './index.css';
 
-import { login } from '../../services/ServiceAPI';
+import { login, getProfileUser } from '../../services/ServiceAPI';
+import { useTestConnect } from '../../utils/Hook/sessionManagement.jsx';
+import { addConnection } from '../../utils/Store/store.jsx';
 
 export default function Signin() {
 	const [email, setEmail] = useState('');
@@ -19,18 +22,22 @@ export default function Signin() {
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const testConnection = useTestConnect();
 
 	// Changement du titre de la page
 	useEffect(() => {
 		document.title = 'Argent Bank - Connexion';
 	}, []);
 
+	// Chargement du token et sauvegarde dans le store
 	useEffect(() => {
-		if (localStorage.getItem('token')) {
+		if (testConnection) {
 			navigate('/user');
 		}
-	}, [navigate]);
+	}, [testConnection, navigate]);
 
+	// Vérification, connexion et récupération des données de l'utilisateur
 	const connection = async (e) => {
 		e.preventDefault();
 		const regexMail = /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/; //eslint-disable-line
@@ -61,8 +68,43 @@ export default function Signin() {
 				if (data.body && data.body.token) {
 					setError(false);
 					setErrorMessage('');
-					localStorage.setItem('token', data.body.token);
-					navigate('/user');
+					try {
+						const userData = await getProfileUser(data.body.token);
+						if (userData.body && userData.body.firstName && userData.body.lastName) {
+							const user = {
+								token: data.body.token,
+								firstname: userData.body.firstName,
+								lastname: userData.body.lastName,
+							};
+							if (remember) {
+								sessionStorage.clear();
+								localStorage.setItem('user', JSON.stringify(user));
+							} else {
+								localStorage.clear();
+								sessionStorage.setItem('user', JSON.stringify(user));
+							}
+							dispatch(
+								addConnection({
+									token: data.body.token,
+									firstname: userData.body.firstName,
+									lastname: userData.body.lastName,
+								})
+							);
+							navigate('/user');
+						} else if (data.status === 404) {
+							setError(true);
+							setErrorMessage('Le serveur API est introuvable !');
+						} else if (data.status === 500) {
+							setError(true);
+							setErrorMessage('Une erreur en lien avec le serveur est survenue lors de la connexion !');
+						} else {
+							setError(true);
+							setErrorMessage('Une erreur est survenue lors de la connexion !');
+						}
+					} catch (error) {
+						setError(true);
+						setErrorMessage('Une erreur est survenue lors de la connexion !');
+					}
 				} else if (data.status === 400) {
 					setError(true);
 					setErrorMessage('Votre e-mail ou votre mot de passe est incorrect !');
