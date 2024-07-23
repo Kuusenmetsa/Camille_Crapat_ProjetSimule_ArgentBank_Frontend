@@ -71,21 +71,26 @@ export default function Signin() {
 					try {
 						const userData = await getProfileUser(data.body.token);
 						if (userData.body && userData.body.firstName && userData.body.lastName) {
-							const user = {
-								token: data.body.token,
-								firstname: userData.body.firstName,
-								lastname: userData.body.lastName,
-							};
 							if (remember) {
 								sessionStorage.clear();
-								localStorage.setItem('user', JSON.stringify(user));
+								localStorage.setItem('token', data.body.token);
+								localStorage.setItem('id', userData.body.id);
+								localStorage.setItem('email', userData.body.email);
+								localStorage.setItem('firstname', userData.body.firstName);
+								localStorage.setItem('lastname', userData.body.lastName);
 							} else {
 								localStorage.clear();
-								sessionStorage.setItem('user', JSON.stringify(user));
+								sessionStorage.setItem('token', data.body.token);
+								sessionStorage.setItem('id', userData.body.id);
+								sessionStorage.setItem('email', userData.body.email);
+								sessionStorage.setItem('firstname', userData.body.firstName);
+								sessionStorage.setItem('lastname', userData.body.lastName);
 							}
 							dispatch(
 								addConnection({
 									token: data.body.token,
+									id: userData.body.id,
+									email: userData.body.email,
 									firstname: userData.body.firstName,
 									lastname: userData.body.lastName,
 								})

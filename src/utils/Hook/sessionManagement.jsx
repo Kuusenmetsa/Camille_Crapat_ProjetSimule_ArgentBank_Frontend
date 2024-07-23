@@ -2,20 +2,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addConnection } from '../Store/store';
 
 export function useTestConnect() {
-	if (useSelector((state) => state.Auth.token)) {
+	if (useSelector((state) => state.Auth.token) !== null) {
 		return 1;
-	} else if (JSON.parse(localStorage.getItem('user'))) {
-		if (JSON.parse(localStorage.getItem('user').token)) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else if (JSON.parse(sessionStorage.getItem('user'))) {
-		if (JSON.parse(sessionStorage.getItem('user')).token) {
-			return 1;
-		} else {
-			return 0;
-		}
+	} else if (localStorage.getItem('token') || sessionStorage.getItem('token')) {
+		return 1;
 	} else {
 		return 0;
 	}
