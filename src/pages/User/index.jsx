@@ -1,18 +1,39 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import './index.css';
 
+import { useTestConnect } from '../../utils/Hook/sessionManagement';
+
 export default function User() {
+	const navigate = useNavigate();
+	const testConnect = useTestConnect();
+	const userSelector = useSelector((state) => state.Auth);
+
 	useEffect(() => {
 		document.title = 'Argent Bank - Mon compte';
 	}, []);
+
+	useEffect(() => {
+		if (!testConnect) {
+			navigate('/signin');
+		}
+	}, [testConnect, navigate]);
+
 	return (
 		<main className='main bg-dark'>
 			<div className='header'>
 				<h1>
 					Welcome back
 					<br />
-					Tony Jarvis!
+					{userSelector.firstname !== null && userSelector.lastname !== null
+						? `${userSelector.firstname} ${userSelector.lastname}`
+						: localStorage.getItem('firstname') && localStorage.getItem('lastname')
+						? `${localStorage.getItem('firstname')} ${localStorage.getItem('lastname')}`
+						: sessionStorage.getItem('firstname') &&
+						  sessionStorage.getItem('lastname') &&
+						  `${sessionStorage.getItem('firstname')} ${sessionStorage.getItem('lastname')}`}
 				</h1>
 				<button className='edit-button'>Edit Name</button>
 			</div>
