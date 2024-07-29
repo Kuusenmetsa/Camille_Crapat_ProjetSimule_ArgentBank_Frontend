@@ -309,3 +309,18 @@ form .error {
 	font-size: 14px;
 	text-align: left;
 }
+.form-editProfile {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 15px;
+}
+.form-editProfile input[type='text'] {
+	height: 30px;
+	border-radius: 5px;
+	border: 0;
+}
+.form-editProfile label {
+	font-size: 18px;
+}
