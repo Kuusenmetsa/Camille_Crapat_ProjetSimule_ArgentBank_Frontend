@@ -18,12 +18,8 @@ export default function Header() {
 
 	const disconnect = (e) => {
 		e.preventDefault();
-		if (localStorage.getItem('token')) {
-			localStorage.clear();
-		}
-		if (sessionStorage.getItem('token')) {
-			sessionStorage.clear();
-		}
+		localStorage.clear();
+		sessionStorage.clear();
 		dispatch(delConnection());
 		navigate('/');
 	};
