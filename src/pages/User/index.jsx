@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -6,10 +6,13 @@ import './index.css';
 
 import { useTestConnect } from '../../utils/Hook/sessionManagement';
 
+import EditUser from '../../components/EditUser';
+
 export default function User() {
 	const navigate = useNavigate();
 	const testConnect = useTestConnect();
 	const userSelector = useSelector((state) => state.Auth);
+	const [editUser, setEditUser] = useState(false);
 
 	useEffect(() => {
 		document.title = 'Argent Bank - Mon compte';
@@ -27,15 +30,31 @@ export default function User() {
 				<h1>
 					Welcome back
 					<br />
-					{userSelector.firstname !== null && userSelector.lastname !== null
-						? `${userSelector.firstname} ${userSelector.lastname}`
-						: localStorage.getItem('firstname') && localStorage.getItem('lastname')
-						? `${localStorage.getItem('firstname')} ${localStorage.getItem('lastname')}`
-						: sessionStorage.getItem('firstname') &&
-						  sessionStorage.getItem('lastname') &&
-						  `${sessionStorage.getItem('firstname')} ${sessionStorage.getItem('lastname')}`}
+					{!editUser ? (
+						userSelector.firstname !== null && userSelector.lastname !== null ? (
+							`${userSelector.firstname} ${userSelector.lastname}`
+						) : localStorage.getItem('firstname') && localStorage.getItem('lastname') ? (
+							`${localStorage.getItem('firstname')} ${localStorage.getItem('lastname')}`
+						) : (
+							sessionStorage.getItem('firstname') &&
+							sessionStorage.getItem('lastname') &&
+							`${sessionStorage.getItem('firstname')} ${sessionStorage.getItem('lastname')}`
+						)
+					) : (
+						<EditUser setEditUser={setEditUser} />
+					)}
 				</h1>
-				<button className='edit-button'>Edit Name</button>
+				{!editUser && (
+					<button
+						className='edit-button'
+						onClick={(e) => {
+							e.preventDefault();
+							setEditUser(!editUser);
+						}}
+					>
+						Edit Name
+					</button>
+				)}
 			</div>
 			<h2 className='sr-only'>Accounts</h2>
 			<section className='account'>
