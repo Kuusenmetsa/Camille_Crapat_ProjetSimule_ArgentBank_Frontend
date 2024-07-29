@@ -8,7 +8,7 @@ import './index.css';
 
 import { login, getProfileUser } from '../../services/ServiceAPI';
 import { useTestConnect } from '../../utils/Hook/sessionManagement.jsx';
-import { addConnection } from '../../utils/Store/store.jsx';
+import { addToken, addIdentity, addProfileUser } from '../../utils/Store/store.jsx';
 
 export default function Signin() {
 	const [email, setEmail] = useState('');
@@ -86,15 +86,9 @@ export default function Signin() {
 								sessionStorage.setItem('firstname', userData.body.firstName);
 								sessionStorage.setItem('lastname', userData.body.lastName);
 							}
-							dispatch(
-								addConnection({
-									token: data.body.token,
-									id: userData.body.id,
-									email: userData.body.email,
-									firstname: userData.body.firstName,
-									lastname: userData.body.lastName,
-								})
-							);
+							dispatch(addToken({ token: data.body.token }));
+							dispatch(addIdentity({ firstname: userData.body.firstName, lastname: userData.body.lastName }));
+							dispatch(addProfileUser({ id: userData.body.id, email: userData.body.email }));
 							navigate('/user');
 						} else if (data.status === 404) {
 							setError(true);

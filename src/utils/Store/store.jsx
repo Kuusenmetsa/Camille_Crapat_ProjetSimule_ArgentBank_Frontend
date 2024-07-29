@@ -10,10 +10,14 @@ const authSlice = createSlice({
 		lastname: null,
 	},
 	reducers: {
-		addConnection: (state, action) => {
+		addToken: (state, action) => {
 			state.token = action.payload.token;
+		},
+		addIdentity: (state, action) => {
 			state.firstname = action.payload.firstname;
 			state.lastname = action.payload.lastname;
+		},
+		addProfileUser: (state, action) => {
 			state.id = action.payload.id;
 			state.email = action.payload.email;
 		},
@@ -27,7 +31,7 @@ const authSlice = createSlice({
 	},
 });
 
-export const { addConnection, delConnection } = authSlice.actions;
+export const { addToken, addIdentity, addProfileUser, delConnection } = authSlice.actions;
 
 export const store = configureStore({
 	reducer: {
