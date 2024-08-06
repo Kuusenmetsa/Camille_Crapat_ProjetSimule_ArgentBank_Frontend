@@ -45,7 +45,7 @@ export default function EditUser({ setEditUser }) {
 			setFirstnameErrorMessage('Please enter the firstname field !');
 		} else if (!regexText.test(firstname)) {
 			setFirstnameError(true);
-			setFirstnameErrorMessage('Please enter the lastname field correctly !');
+			setFirstnameErrorMessage('Please enter the firstname field correctly !');
 		} else {
 			setLastnameError(false);
 			setLastnameErrorMessage('');
@@ -109,8 +109,7 @@ export default function EditUser({ setEditUser }) {
 			}}
 			className='form-editProfile'
 		>
-			<div className='input-wrapper'>
-				<label htmlFor='lastname'>Lastname</label>
+			<div className='input'>
 				<input
 					id='lastname'
 					name='lastname'
@@ -122,10 +121,6 @@ export default function EditUser({ setEditUser }) {
 					}}
 					type='text'
 				/>
-				{lastnameError && <span className='error'>{lastnameErrorMessage}</span>}
-			</div>
-			<div className='input-wrapper'>
-				<label htmlFor='firstname'>Firstname</label>
 				<input
 					id='firstname'
 					name='firstname'
@@ -137,10 +132,26 @@ export default function EditUser({ setEditUser }) {
 					}}
 					type='text'
 				/>
-				{firstnameError && <span className='error'>{firstnameErrorMessage}</span>}
 			</div>
-			{error && <span className='error'>{errorMessage}</span>}
-			<input type='submit' value='Valider' className='edit-button' />
+
+			<div className='action'>
+				{lastnameError && <span className='error'>{lastnameErrorMessage}</span>}
+				{firstnameError && <span className='error'>{firstnameErrorMessage}</span>}
+				{error && <span className='error'>{errorMessage}</span>}
+				<div className='button'>
+					<input type='submit' value='Save' className='edit-button--edit' />
+					<button
+						type='button'
+						className='edit-button--edit'
+						onClick={(e) => {
+							e.preventDefault();
+							setEditUser(false);
+						}}
+					>
+						Cancel
+					</button>
+				</div>
+			</div>
 		</form>
 	);
 }
